@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+    shipment_db:
+        image: mysql:8.0
+        environment:
+            - MYSQL_ROOT_PASSWORD=admin
+            - MYSQL_DATABASE=sample
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=pass
+        volumes:
+            - ./initdb.d/:/docker-entrypoint-initdb.d/
+
+    webserver:
+        image: puckel/docker-airflow:1.10.1
+        restart: always
+        depends_on:
+            - shipment_db
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+        ports:
+            - "8080:8080"
+        environment:
+            - AIRFLOW_CONN_MYSQL_DEFAULT=mysql://user:pass@shipment_db:/sample
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
