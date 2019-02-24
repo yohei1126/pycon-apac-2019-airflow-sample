@@ -119,4 +119,4 @@ class PostgresToS3Operator(BaseOperator):
         hook = S3Hook(aws_conn_id=self.aws_conn_id)
         for object, tmp_file_handle in files_to_upload.items():
             logging.info('_upload_to_s3: file = %s, bucket = %s, key = %s', tmp_file_handle.name, self.bucket, object)
-            hook.load_file_obj(tmp_file_handle, object, self.bucket)
+            hook.load_file_obj(file_obj=tmp_file_handle, key=object, bucket_name=self.bucket, replace=True)
