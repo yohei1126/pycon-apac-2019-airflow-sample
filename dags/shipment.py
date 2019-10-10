@@ -24,7 +24,7 @@ custom_param_per_dag = {
     },
     'eu': {
         'dest_bucket': 'test-pyconapac-eu',
-        'schedule_interval': '0 6 * * *',  # 1 AM CET
+        'schedule_interval': '0 0 * * *',  # 1 AM CET
     },
     'us': {
         'dest_bucket': 'test-pyconapac-us',
