@@ -1,3 +1,4 @@
+import os
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
@@ -13,17 +14,17 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'source_bucket': 'test-pyconapac-jp'
+    'source_bucket': os.environ['SOURCE_BUCKET']
 }
 
 custom_param_per_dag = {
     'sg': {
-        'dest_bucket': 'test-pyconapac-sg',
+        'dest_bucket': os.environ['DEST_BUCKET_SG'],
         'schedule_interval': '0 17 * * *',  # 1 AM SGT 
     },
     'eu': {
         'dest_bucket': 'test-pyconapac-eu',
-        'schedule_interval': '0 6 * * *',  # 1 AM SGT
+        'schedule_interval': '0 0 * * *',  # 1 AM CET
     },
     'us': {
         'dest_bucket': 'test-pyconapac-us',
