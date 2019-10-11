@@ -40,7 +40,7 @@ for region, v in custom_param_per_dag.items():
         max_active_runs=1
     )
 
-    t1 = PostgresToS3Operator(
+    export = PostgresToS3Operator(
         task_id='db_to_s3',
         sql="SELECT * FROM shipment WHERE region = '{{ params.region }}' AND ship_date = '{{ execution_date.strftime(\"%Y-%m-%d\") }}'",
         bucket=default_args['source_bucket'],
@@ -48,7 +48,7 @@ for region, v in custom_param_per_dag.items():
         params={'region':region},
         dag=dag)
 
-    t2 = S3CopyObjectOperator(
+    transform = S3CopyObjectOperator(
         task_id='s3_to_s3',
         source_object_key='{{ params.region }}/{{ execution_date.strftime("%Y%m%d%H%M%S") }}.csv',
         dest_object_key='{{ execution_date.strftime("%Y%m%d%H%M%S") }}.csv',
@@ -57,6 +57,6 @@ for region, v in custom_param_per_dag.items():
         params={'region': region},
         dag=dag)
 
-    t1 >> t2
+    export >> transform
 
     globals()[dag] = dag
