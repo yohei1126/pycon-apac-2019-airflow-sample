@@ -23,11 +23,11 @@ custom_param_per_dag = {
         'schedule_interval': '0 17 * * *',  # 1 AM SGT 
     },
     'eu': {
-        'dest_bucket': 'test-pyconapac-eu',
+        'dest_bucket': os.environ['DEST_BUCKET_EU'],
         'schedule_interval': '0 0 * * *',  # 1 AM CET
     },
     'us': {
-        'dest_bucket': 'test-pyconapac-us',
+        'dest_bucket': os.environ['DEST_BUCKET_US'],
         'schedule_interval': '0 9 * * *',  # 1 AM PST
     },
 }
